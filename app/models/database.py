@@ -38,6 +38,7 @@ def get_db():
 
 def create_tables():
     """Create all tables in the database (for development)"""
+    # Import blockchain models
     from app.guilds.blockchain.schemas.star_schema import (
         DimUser, 
         DimStatus, 
@@ -45,4 +46,12 @@ def create_tables():
         DimConcept, 
         FactTransaction
     )
+    
+    # Import marketplace models
+    from app.guilds.marketplace.models.tables import (
+        Tenant,
+        Comercio,
+        Categoria
+    )
+    
     Base.metadata.create_all(bind=engine)

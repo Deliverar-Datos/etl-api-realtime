@@ -8,8 +8,14 @@ class EventTopic(str, Enum):
     CRYPTO_PAYMENT = "crypto.payment"
     BUY_CRYPTO = "buy.crypto"
     SELL_CRYPTO = "sell.crypto"
+    
+    ## Marketplace
+    TENANT_CREAR = "tenant.crear"
+    COMERCIO_CREAR = "comercio.crear"
+    CATEGORIA_CREAR = "categoria.crear"
 
 
 class CallbackRequest(BaseModel):
     topic: EventTopic
-    data: dict
+    payload: Optional[dict] = None
+
