@@ -6,9 +6,9 @@ class Settings(BaseSettings):
     # Database settings
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "admin")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "admin")
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "deliverar")
+    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "integracion")
+    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "gatopardo123")
+    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "deliverar_db")
     
     # Application settings
     APP_NAME: str = "Multi-Guild Event Processor"
