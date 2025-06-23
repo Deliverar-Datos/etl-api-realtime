@@ -9,15 +9,7 @@ class EventTopic(str, Enum):
     BUY_CRYPTO = "buy.crypto"
     SELL_CRYPTO = "sell.crypto"
 
-class EventMetadata(BaseModel):
-    timestamp: datetime
-    source: Optional[str] = None
 
 class CallbackRequest(BaseModel):
     topic: EventTopic
     data: dict
-
-
-class EventPayload(BaseModel):
-    topic: EventTopic
-    data: dict  # Will be validated by topic-specific schemas
