@@ -19,7 +19,7 @@ async def handle_event(
     
     Topic-based routing:
     - crypto.payment, buy.crypto, sell.crypto -> blockchain guild
-    - tenant.crear, comercio.crear, categoria.crear -> marketplace guild
+    - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
     """
     try:
         print(request)
@@ -37,7 +37,7 @@ async def handle_event(
                 "guild": "blockchain",
                 "topic": request.topic
             }
-        elif request.topic in [EventTopic.TENANT_CREAR, EventTopic.COMERCIO_CREAR, EventTopic.CATEGORIA_CREAR]:
+        elif request.topic in [EventTopic.TENANT_CREADO, EventTopic.COMERCIO_CREADO, EventTopic.CATEGORIA_CREADA]:
             result = MarketplaceTopicRouter.route(request.topic, request.payload, db)
             return {
                 "status": "success", 
@@ -48,7 +48,7 @@ async def handle_event(
         else:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Unsupported topic: {request.topic}. Supported topics: crypto.payment, buy.crypto, sell.crypto, tenant.crear, comercio.crear, categoria.crear"
+                detail=f"Unsupported topic: {request.topic}. Supported topics: crypto.payment, buy.crypto, sell.crypto, tenant.creado, comercio.creado, categoria.creada"
             )
             
     except ValueError as e:

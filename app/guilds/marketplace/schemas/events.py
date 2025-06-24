@@ -3,13 +3,26 @@ from datetime import datetime
 from typing import Optional
 from app.events.schemas.base import EventTopic
 
+class UbicacionData(BaseModel):
+    calle: Optional[str] = None
+    numero: Optional[str] = None
+    ciudad: Optional[str] = None
+    provincia: Optional[str] = None
+    codigo_postal: Optional[str] = None
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+
 class TenantData(BaseModel):
     tenant_id: int
+    nombre: str
+    razon_social: Optional[str] = None
+    ubicacion: Optional[UbicacionData] = None
+    cuenta_bancaria: Optional[str] = None
     estado: str
 
 class TenantCreateEvent(BaseModel):
-    timestamp: datetime
     tenant: TenantData
+    timestamp: datetime
 
 class ComercioData(BaseModel):
     comercio_id: int
@@ -24,8 +37,8 @@ class ComercioData(BaseModel):
     codigo_postal: Optional[str] = None
 
 class ComercioCreateEvent(BaseModel):
-    timestamp: datetime
     comercio: ComercioData
+    timestamp: datetime
 
 class CategoriaData(BaseModel):
     categoria_id: int
@@ -33,5 +46,5 @@ class CategoriaData(BaseModel):
     nombre: str
 
 class CategoriaCreateEvent(BaseModel):
-    timestamp: datetime
     categoria: CategoriaData
+    timestamp: datetime

@@ -12,6 +12,16 @@ class Tenant(Base):
     __tablename__ = 'tenants'
     
     tenant_id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(Text, nullable=False)
+    razon_social = Column(Text, nullable=True)
+    calle = Column(Text, nullable=True)
+    numero = Column(Text, nullable=True)
+    ciudad = Column(Text, nullable=True)
+    provincia = Column(Text, nullable=True)
+    codigo_postal = Column(Text, nullable=True)
+    lat = Column(Float, nullable=True)
+    lon = Column(Float, nullable=True)
+    cuenta_bancaria = Column(Text, nullable=True)
     estado = Column(Text, nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), default=datetime.utcnow, server_default=func.now())
     

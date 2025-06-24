@@ -10,9 +10,9 @@ class EventTopic(str, Enum):
     SELL_CRYPTO = "sell.crypto"
     
     ## Marketplace
-    TENANT_CREAR = "tenant.crear"
-    COMERCIO_CREAR = "comercio.crear"
-    CATEGORIA_CREAR = "categoria.crear"
+    TENANT_CREADO = "tenant.creado"
+    COMERCIO_CREADO = "comercio.creado"
+    CATEGORIA_CREADA = "categoria.creada"
 
 
 class CallbackRequest(BaseModel):

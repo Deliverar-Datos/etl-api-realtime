@@ -10,15 +10,15 @@ class MarketplaceTopicRouter:
     def route(topic: str, payload: dict, db: Session):
         """Route marketplace events to appropriate processors"""
         try:
-            if topic == "tenant.crear":
+            if topic == "tenant.creado":
                 print("Tenant Creation")
                 data = TenantCreateEvent(**payload)
                 return CreateTenantProcessor.process(db, data)
-            elif topic == "comercio.crear":
+            elif topic == "comercio.creado":
                 print("Comercio Creation")
                 data = ComercioCreateEvent(**payload)
                 return CreateComercioProcessor.process(db, data)
-            elif topic == "categoria.crear":
+            elif topic == "categoria.creada":
                 print("Categoria Creation")
                 data = CategoriaCreateEvent(**payload)
                 return CreateCategoriaProcessor.process(db, data)
