@@ -53,5 +53,10 @@ def create_tables():
         Comercio,
         Categoria
     )
+    # Import backoffice models
+    from app.guilds.backoffice.models.tables import (
+        SolicitudIva,
+        PedidoIva
+    )
     
     Base.metadata.create_all(bind=engine)

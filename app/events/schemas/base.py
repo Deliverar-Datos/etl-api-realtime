@@ -14,6 +14,10 @@ class EventTopic(str, Enum):
     COMERCIO_CREADO = "comercio.creado"
     CATEGORIA_CREADA = "categoria.creada"
 
+    ## Backoffice
+    IVA_PEDIDO = "iva.pedido"
+    IVA_RESPUESTA = "iva.respuesta"
+
 
 class CallbackRequest(BaseModel):
     topic: EventTopic
