@@ -7,6 +7,8 @@ from app.guilds.blockchain.services.topic_router import BlockchainTopicRouter
 from app.guilds.marketplace.services.topic_router import MarketplaceTopicRouter
 import logging
 from fastapi.responses import PlainTextResponse
+import pdb
+
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -24,7 +26,9 @@ async def handle_event(
     - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
     """
     try:
+
         print(request)
+        pdb.set_trace()  # Debug breakpoint to analyze request
         create_tables()
         print("Tables created")
         logger.info(f"Processing event: topic={request.topic}")
