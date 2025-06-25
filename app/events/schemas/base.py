@@ -18,6 +18,5 @@ class EventTopic(str, Enum):
 
 
 class CallbackRequest(BaseModel):
-    topic: EventTopic
-    payload: Optional[dict] = None
+    body: Optional[dict] = None
 

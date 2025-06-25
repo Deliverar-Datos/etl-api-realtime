@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.post("/callback")
 async def handle_event(
-    request: Request,
+    raw_request: Request,
     db: Session = Depends(get_db)
 ):
     """
@@ -26,42 +26,43 @@ async def handle_event(
     - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
     """
     try:
+        print(f"Raw request headers: {dict(raw_request.headers)}")
+        print(f"Raw request query params: {dict(raw_request.query_params)}")
+        
+        # Get topic from x-topic header
+        topic = raw_request.headers.get('x-topic')
+        print(f"Topic from header: {topic}")
 
-        print(request)
-        body = await request.body()
-        print(f"Request body: {body}")
-        print(f"Request body as string: {body.decode('utf-8')}")
-        print(f"Query params: {request.query_params}")
-        print(f"Query params as dict: {dict(request.query_params)}")
-        print(f"Headers: {request.headers}")
-        print(f"Headers as dict: {dict(request.headers)}")
-        pdb.set_trace()  # Debug breakpoint to analyze request
+        payload = await raw_request.json()
+        
+        if not topic:
+            raise HTTPException(status_code=400, detail="Missing x-topic header")
+        
         create_tables()
         print("Tables created")
-        logger.info(f"Processing event: topic={request.topic}")
+        logger.info(f"Processing event: topic={topic}")
 
-        
         # Route based on topic to determine guild
-        if request.topic in [EventTopic.CRYPTO_PAYMENT, EventTopic.BUY_CRYPTO, EventTopic.SELL_CRYPTO]:
-            result = BlockchainTopicRouter.route(request.topic, request.payload, db)
+        if topic in [EventTopic.CRYPTO_PAYMENT, EventTopic.BUY_CRYPTO, EventTopic.SELL_CRYPTO]:
+            result = BlockchainTopicRouter.route(topic, payload, db)
             return {
                 "status": "success", 
                 "processed_id": result.id,
                 "guild": "blockchain",
-                "topic": request.topic
+                "topic": topic
             }
-        elif request.topic in [EventTopic.TENANT_CREADO, EventTopic.COMERCIO_CREADO, EventTopic.CATEGORIA_CREADA]:
-            result = MarketplaceTopicRouter.route(request.topic, request.payload, db)
+        elif topic in [EventTopic.TENANT_CREADO, EventTopic.COMERCIO_CREADO, EventTopic.CATEGORIA_CREADA]:
+            result = MarketplaceTopicRouter.route(topic, payload, db)
             return {
                 "status": "success", 
                 "processed_id": result.tenant_id if hasattr(result, 'tenant_id') else result.comercio_id if hasattr(result, 'comercio_id') else result.categoria_id,
                 "guild": "marketplace",
-                "topic": request.topic
+                "topic": topic
             }
-        elif request.topic in [EventTopic.BI_TEST]:
-            return request
+        elif topic in [EventTopic.BI_TEST]:
+            return payload
         else:
-            return request
+            return payload
             
     except ValueError as e:
         logger.error(f"Validation error: {str(e)}")
