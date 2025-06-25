@@ -31,6 +31,8 @@ async def handle_event(
         body = await request.body()
         print(f"Request body: {body}")
         print(f"Request body as string: {body.decode('utf-8')}")
+        print(f"Query params: {request.query_params}")
+        print(f"Query params as dict: {dict(request.query_params)}")
         pdb.set_trace()  # Debug breakpoint to analyze request
         create_tables()
         print("Tables created")
