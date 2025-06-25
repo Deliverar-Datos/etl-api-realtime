@@ -28,6 +28,9 @@ async def handle_event(
     try:
 
         print(request)
+        body = await request.body()
+        print(f"Request body: {body}")
+        print(f"Request body as string: {body.decode('utf-8')}")
         pdb.set_trace()  # Debug breakpoint to analyze request
         create_tables()
         print("Tables created")
