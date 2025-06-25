@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 from app.guilds.marketplace.models.tables import Tenant
-from app.guilds.marketplace.schemas.events import TenantCreateEvent
+from app.guilds.marketplace.schemas.events import TenantCreadoPayload
 from datetime import datetime
 
 class CreateTenantProcessor:
     @staticmethod
-    def process(db: Session, data: TenantCreateEvent):
+    def process(db: Session, data: TenantCreadoPayload):
         """Process tenant creation events"""
         try:
             # Check if tenant already exists

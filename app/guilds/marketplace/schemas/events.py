@@ -1,50 +1,49 @@
-from pydantic import BaseModel, Field
-from datetime import datetime
+from pydantic import BaseModel
 from typing import Optional
-from app.events.schemas.base import EventTopic
 
-class UbicacionData(BaseModel):
-    calle: Optional[str] = None
-    numero: Optional[str] = None
-    ciudad: Optional[str] = None
-    provincia: Optional[str] = None
-    codigo_postal: Optional[str] = None
-    lat: Optional[float] = None
-    lon: Optional[float] = None
+class Ubicacion(BaseModel):
+    calle: str
+    numero: str
+    ciudad: str
+    provincia: str
+    codigo_postal: str
+    lat: float
+    lon: float
 
 class TenantData(BaseModel):
     tenant_id: int
     nombre: str
-    razon_social: Optional[str] = None
-    ubicacion: Optional[UbicacionData] = None
-    cuenta_bancaria: Optional[str] = None
-    estado: str
-
-class TenantCreateEvent(BaseModel):
-    tenant: TenantData
-    timestamp: datetime
+    razon_social: Optional[str]
+    ubicacion: Ubicacion
+    cuenta_bancaria: Optional[str]
+    estado: Optional[str]
 
 class ComercioData(BaseModel):
     comercio_id: int
     tenant_id: int
     nombre: str
-    lat: Optional[float] = None
-    lon: Optional[float] = None
-    calle: Optional[str] = None
-    numero: Optional[str] = None
-    ciudad: Optional[str] = None
-    provincia: Optional[str] = None
-    codigo_postal: Optional[str] = None
-
-class ComercioCreateEvent(BaseModel):
-    comercio: ComercioData
-    timestamp: datetime
+    lat: float
+    lon: float
+    calle: str
+    numero: str
+    ciudad: str
+    provincia: str
+    codigo_postal: str
 
 class CategoriaData(BaseModel):
     categoria_id: int
     tenant_id: int
     nombre: str
 
-class CategoriaCreateEvent(BaseModel):
+class TenantCreadoPayload(BaseModel):
+    tenant: TenantData
+    timestamp: str
+
+class ComercioCreadoPayload(BaseModel):
+    comercio: ComercioData
+    timestamp: str
+
+class CategoriaCreadaPayload(BaseModel):
     categoria: CategoriaData
-    timestamp: datetime
+    timestamp: str
+    

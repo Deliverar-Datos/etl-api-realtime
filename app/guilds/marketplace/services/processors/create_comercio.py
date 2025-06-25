@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 from app.guilds.marketplace.models.tables import Comercio, Tenant
-from app.guilds.marketplace.schemas.events import ComercioCreateEvent
+from app.guilds.marketplace.schemas.events import ComercioCreadoPayload
 from datetime import datetime
 
 class CreateComercioProcessor:
     @staticmethod
-    def process(db: Session, data: ComercioCreateEvent):
+    def process(db: Session, data: ComercioCreadoPayload):
         """Process comercio creation events"""
         try:
             # Verify tenant exists

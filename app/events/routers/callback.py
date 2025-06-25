@@ -1,7 +1,7 @@
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from app.events.schemas.base import CallbackRequest, EventTopic
+from app.events.schemas.base import EventTopic
 from app.models.database import create_tables, get_db
 from app.guilds.blockchain.services.topic_router import BlockchainTopicRouter
 from app.guilds.marketplace.services.topic_router import MarketplaceTopicRouter
