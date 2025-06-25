@@ -5,6 +5,7 @@ from app.events.schemas.base import EventTopic
 from app.models.database import create_tables, get_db
 from app.guilds.blockchain.services.topic_router import BlockchainTopicRouter
 from app.guilds.marketplace.services.topic_router import MarketplaceTopicRouter
+from app.guilds.repartidor.services.topic_router import RepartidorTopicRouter
 import logging
 from fastapi.responses import PlainTextResponse
 import pdb
@@ -24,6 +25,7 @@ async def handle_event(
     Topic-based routing:
     - crypto.payment, buy.crypto, sell.crypto -> blockchain guild
     - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
+    - pedido.aceptado, pedido.asignado, pedido.entregado, pedido.arribo, delivery.nuevoRepartidor, pedido.enCamino -> repartidor guild
     """
     try:
         print(f"Raw request headers: {dict(raw_request.headers)}")
@@ -61,6 +63,21 @@ async def handle_event(
             }
         elif topic in [EventTopic.BI_TEST]:
             return payload
+        elif topic in [
+            EventTopic.PEDIDO_ACEPTADO,
+            EventTopic.PEDIDO_ASIGNADO,
+            EventTopic.PEDIDO_ENTREGADO,
+            EventTopic.PEDIDO_ARRIBO,
+            EventTopic.DELIVERY_NUEVOREPARTIDOR,
+            EventTopic.PEDIDO_ENCAMINO,
+        ]:
+            result = RepartidorTopicRouter.route(topic, payload, db)
+            return {
+                "status": "success",
+                "processed_id": result.id if hasattr(result, 'id') else None,
+                "guild": "repartidor",
+                "topic": topic,
+            }
         else:
             return payload
             

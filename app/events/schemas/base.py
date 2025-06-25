@@ -16,7 +16,14 @@ class EventTopic(str, Enum):
 
     BI_TEST = "bi.test"
 
+    ## Repartidor
+    PEDIDO_ACEPTADO = "pedido.aceptado"
+    PEDIDO_ASIGNADO = "pedido.asignado"
+    PEDIDO_ENTREGADO = "pedido.entregado"
+    PEDIDO_ARRIBO = "pedido.arribo"
+    DELIVERY_NUEVOREPARTIDOR = "delivery.nuevoRepartidor"
+    PEDIDO_ENCAMINO = "pedido.enCamino"
+
 
 class CallbackRequest(BaseModel):
     body: Optional[dict] = None
-
