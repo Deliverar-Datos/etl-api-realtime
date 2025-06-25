@@ -16,6 +16,9 @@ class EventTopic(str, Enum):
 
     BI_TEST = "bi.test"
 
+    ## Backoffice
+    IVA_RESPUESTA = "iva.respuesta"
+
 
 class CallbackRequest(BaseModel):
     body: Optional[dict] = None
