@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/callback")
 async def handle_event(
-    request: CallbackRequest,
+    request: Request,
     db: Session = Depends(get_db)
 ):
     """
@@ -50,10 +50,7 @@ async def handle_event(
         elif request.topic in [EventTopic.BI_TEST]:
             return request
         else:
-            raise HTTPException(
-                status_code=400, 
-                detail=f"Unsupported topic: {request.topic}. Supported topics: crypto.payment, buy.crypto, sell.crypto, tenant.creado, comercio.creado, categoria.creada"
-            )
+            return request
             
     except ValueError as e:
         logger.error(f"Validation error: {str(e)}")
