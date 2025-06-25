@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Any
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.events.schemas.base import CallbackRequest, EventTopic
 from app.models.database import create_tables, get_db
 from app.guilds.blockchain.services.topic_router import BlockchainTopicRouter
 from app.guilds.marketplace.services.topic_router import MarketplaceTopicRouter
 import logging
+from fastapi.responses import PlainTextResponse
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -58,3 +60,16 @@ async def handle_event(
         logger.error(f"Processing error: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    
+@router.get("/callback")
+async def handle_event(
+    request: Request
+):
+    """
+    Verificación de webhook por parte de deliver.ar
+    """
+    challenge = request.query_params.get('challenge')
+    logger.info(f"🔍 Deliver.ar challenge verification: {challenge}")
+    
+    # Responder el challenge para confirmar el webhook
+    return PlainTextResponse(challenge or '')
