@@ -47,6 +47,8 @@ async def handle_event(
                 "guild": "marketplace",
                 "topic": request.topic
             }
+        elif request.topic in [EventTopic.BI_TEST]:
+            return request
         else:
             raise HTTPException(
                 status_code=400, 

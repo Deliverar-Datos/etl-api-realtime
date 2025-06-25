@@ -14,6 +14,8 @@ class EventTopic(str, Enum):
     COMERCIO_CREADO = "comercio.creado"
     CATEGORIA_CREADA = "categoria.creada"
 
+    BI_TEST = "bi.test"
+
 
 class CallbackRequest(BaseModel):
     topic: EventTopic

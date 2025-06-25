@@ -1,9 +1,14 @@
+import os
+import sys
+
+# Prevent __pycache__ creation
+os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
+sys.dont_write_bytecode = True
+
 from fastapi import FastAPI
 from app.events.routers.callback import router as callback_router
 from app.models.database import Base, engine
 from app.core.config import settings
-import sys
-sys.dont_write_bytecode = True
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
