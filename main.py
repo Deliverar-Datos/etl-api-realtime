@@ -7,6 +7,7 @@ sys.dont_write_bytecode = True
 
 from fastapi import FastAPI
 from app.events.routers.callback import router as callback_router
+from app.events.routers.role import router as role_router
 from app.models.database import Base, engine
 from app.core.config import settings
 
@@ -21,6 +22,7 @@ app = FastAPI(
 )
 
 app.include_router(callback_router, prefix="/events")
+app.include_router(role_router, prefix="/auth")
 
 @app.get("/")
 async def root():
