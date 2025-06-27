@@ -52,6 +52,12 @@ async def handle_event(
         # Route based on topic to determine guild
         if topic in [EventTopic.CRYPTO_PAYMENT, EventTopic.BUY_CRYPTO, EventTopic.SELL_CRYPTO]:
             result = BlockchainTopicRouter.route(topic, payload, db)
+            print({
+                "status": "success", 
+                "processed_id": result.id,
+                "guild": "blockchain",
+                "topic": topic
+            })
             return {
                 "status": "success", 
                 "processed_id": result.id,
