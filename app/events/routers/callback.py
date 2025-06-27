@@ -5,7 +5,11 @@ from app.events.schemas.base import EventTopic
 from app.models.database import create_tables, get_db
 from app.guilds.blockchain.services.topic_router import BlockchainTopicRouter
 from app.guilds.marketplace.services.topic_router import MarketplaceTopicRouter
+
 from app.guilds.repartidor.services.topic_router import RepartidorTopicRouter
+
+from app.guilds.backoffice.services.topic_router import BackofficeTopicRouter
+
 import logging
 from fastapi.responses import PlainTextResponse
 import pdb
@@ -26,6 +30,7 @@ async def handle_event(
     - crypto.payment, buy.crypto, sell.crypto -> blockchain guild
     - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
     - pedido.aceptado, pedido.asignado, pedido.entregado, pedido.arribo, delivery.nuevoRepartidor, pedido.enCamino, pedido.cancelado -> repartidor guild
+    - iva.respuesta -> backoffice guild
     """
     try:
         print(f"Raw request headers: {dict(raw_request.headers)}")
@@ -60,6 +65,21 @@ async def handle_event(
                 "processed_id": result.tenant_id if hasattr(result, 'tenant_id') else result.comercio_id if hasattr(result, 'comercio_id') else result.categoria_id,
                 "guild": "marketplace",
                 "topic": topic
+            }
+        elif topic in [EventTopic.IVA_RESPUESTA]:
+            result = BackofficeTopicRouter.route(topic, payload, db)
+            return {
+                "status": "success", 
+                "processed_id": result.processed_id,
+                "guild": "backoffice",
+                "topic": topic,
+                "details": {
+                    "processed_orders": result.details.get('processed_count', 0),
+                    "skipped_orders": result.details.get('skipped_count', 0),
+                    "total_iva": result.details.get('total_iva_procesado', 0),
+                    "orders": result.details.get('processed_orders', []),
+                    "statistics": result.details.get('statistics', {})
+                }
             }
         elif topic in [EventTopic.BI_TEST]:
             return payload

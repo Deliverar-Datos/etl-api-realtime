@@ -25,6 +25,10 @@ class EventTopic(str, Enum):
     PEDIDO_ENCAMINO = "pedido.enCamino"
     PEDIDO_CANCELADO = "pedido.cancelado"
 
+    ## Backoffice
+    IVA_RESPUESTA = "iva.respuesta"
+
+
 
 class CallbackRequest(BaseModel):
     body: Optional[dict] = None

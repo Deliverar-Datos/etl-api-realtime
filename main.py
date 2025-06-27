@@ -7,8 +7,10 @@ sys.dont_write_bytecode = True
 
 from fastapi import FastAPI
 from app.events.routers.callback import router as callback_router
+from app.events.routers.role import router as role_router
 from app.models.database import Base, engine
 from app.core.config import settings
+from fastapi.middleware.cors import CORSMiddleware
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -20,7 +22,16 @@ app = FastAPI(
     debug=settings.DEBUG
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite cualquier origen
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos HTTP
+    allow_headers=["*"],  # Permite todos los headers
+)
+
 app.include_router(callback_router, prefix="/events")
+app.include_router(role_router, prefix="/auth")
 
 @app.get("/")
 async def root():
