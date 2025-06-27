@@ -28,6 +28,19 @@ class EventTopic(str, Enum):
     ## Backoffice
     IVA_RESPUESTA = "iva.respuesta"
 
+    ## 📊 Dashboard BI
+    # → Promociones
+    PROMO_REGISTRADA = "promo.registrada"
+    PROMO_COMERCIO_ASOCIADA = "promo.comercio_asociada"
+    PROMO_TENANT_ASOCIADA = "promo.tenant_asociada"
+    # → Ordenes
+    ORDEN_REGISTRADA = "orden.registrada"
+    ORDEN_ESTADO_ACTUALIZADO = "orden.estadoActualizado"
+    # → Clientes
+    CLIENT_REGISTRADO = "cliente.registrado"
+    # → Deliveries
+    DELIVERY_REGISTRADO = "delivery.registrado"
+
 
 
 class CallbackRequest(BaseModel):
