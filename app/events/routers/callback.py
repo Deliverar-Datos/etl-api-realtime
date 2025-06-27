@@ -25,7 +25,7 @@ async def handle_event(
     Topic-based routing:
     - crypto.payment, buy.crypto, sell.crypto -> blockchain guild
     - tenant.creado, comercio.creado, categoria.creada -> marketplace guild
-    - pedido.aceptado, pedido.asignado, pedido.entregado, pedido.arribo, delivery.nuevoRepartidor, pedido.enCamino -> repartidor guild
+    - pedido.aceptado, pedido.asignado, pedido.entregado, pedido.arribo, delivery.nuevoRepartidor, pedido.enCamino, pedido.cancelado -> repartidor guild
     """
     try:
         print(f"Raw request headers: {dict(raw_request.headers)}")
@@ -70,6 +70,7 @@ async def handle_event(
             EventTopic.PEDIDO_ARRIBO,
             EventTopic.DELIVERY_NUEVOREPARTIDOR,
             EventTopic.PEDIDO_ENCAMINO,
+            EventTopic.PEDIDO_CANCELADO,
         ]:
             result = RepartidorTopicRouter.route(topic, payload, db)
             return {

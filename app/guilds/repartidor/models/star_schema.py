@@ -17,7 +17,7 @@ class DimRepartidor(Base):
 
     eventos = relationship("FactDeliveryEventos", back_populates="repartidor")
     resumenes = relationship("FactDeliveryResumenPedido", back_populates="repartidor")
-    estadisticas = relationship("FactRepartidorEstadisticas", back_populates="repartidor")
+    estadisticas = relationship("FactRepartidorEstadisticas", back_populates="repartidor", foreign_keys="[FactRepartidorEstadisticas.repartidor_id]")
 
 
 # =================================
@@ -63,7 +63,7 @@ class FactDeliveryResumenPedido(Base):
 class FactRepartidorEstadisticas(Base):
     __tablename__ = "fact_repartidor_estadisticas"
 
-    repartidor_id = Column(Integer, primary_key=True)
+    repartidor_id = Column(Integer, ForeignKey("dim_repartidores.repartidor_id"), primary_key=True)
     nombre = Column(String(50))
     apellido = Column(String(50))
     telefono = Column(String(20))

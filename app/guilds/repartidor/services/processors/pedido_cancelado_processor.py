@@ -1,14 +1,13 @@
 from sqlalchemy.orm import Session
-from app.guilds.repartidor.schemas.events import PedidoArribo
+from app.guilds.repartidor.schemas.events import PedidoCancelado
 from app.guilds.repartidor.services.processors.utils_update_summary import update_fact_delivery_resumen_pedido, update_fact_repartidor_estadisticas
-
 from datetime import datetime
 from app.guilds.repartidor.models.star_schema import FactDeliveryEventos
 
-def process(db: Session, data: PedidoArribo):
-    """Process pedido arribo event"""
+def process(db: Session, data: PedidoCancelado):
+    """Process pedido cancelado event"""
     try:
-        print(f"Processing pedido arribo: {data}")
+        print(f"Processing pedido cancelado: {data}")
 
         # Buscar repartidor_id desde evento con estado ASIGNADO
         evento_asignado = db.query(FactDeliveryEventos).filter(
@@ -44,4 +43,4 @@ def process(db: Session, data: PedidoArribo):
         return data
     except Exception as e:
         db.rollback()
-        raise ValueError(f"Error processing pedido arribo: {str(e)}")
+        raise ValueError(f"Error processing pedido cancelado: {str(e)}")

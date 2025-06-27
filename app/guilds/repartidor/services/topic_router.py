@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.events.schemas.base import EventTopic
-from app.guilds.repartidor.schemas.events import PedidoAceptado, PedidoAsignado, PedidoEntregado, PedidoArribo, DeliveryNuevoRepartidor, PedidoEnCamino
-from app.guilds.repartidor.services.processors import pedido_aceptado_processor, pedido_asignado_processor, pedido_entregado_processor, pedido_arribo_processor, delivery_nuevo_repartidor_processor, pedido_en_camino_processor
+from app.guilds.repartidor.schemas.events import PedidoAceptado, PedidoAsignado, PedidoEntregado, PedidoArribo, DeliveryNuevoRepartidor, PedidoEnCamino, PedidoCancelado
+from app.guilds.repartidor.services.processors import pedido_aceptado_processor, pedido_asignado_processor, pedido_entregado_processor, pedido_arribo_processor, delivery_nuevo_repartidor_processor, pedido_en_camino_processor, pedido_cancelado_processor
 
 class RepartidorTopicRouter:
     @staticmethod
@@ -26,6 +26,9 @@ class RepartidorTopicRouter:
             elif topic == EventTopic.PEDIDO_ENCAMINO:
                 data = PedidoEnCamino(**payload)
                 return pedido_en_camino_processor.process(db, data)
+            elif topic == EventTopic.PEDIDO_CANCELADO:
+                data = PedidoCancelado(**payload)
+                return pedido_cancelado_processor.process(db, data)
             else:
                 raise ValueError(f"Unsupported repartidor topic: {topic}")
         except Exception as e:

@@ -4,7 +4,7 @@ import os
 
 class Settings(BaseSettings):
     # Database settings
-    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
+    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "13.219.159.59")
     POSTGRES_PORT: str = os.getenv("POSTGRES_PORT", "5432")
     POSTGRES_USER: str = os.getenv("POSTGRES_USER", "integracion")
     POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "gatopardo123")

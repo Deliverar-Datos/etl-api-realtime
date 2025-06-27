@@ -29,3 +29,7 @@ class DeliveryNuevoRepartidor(BaseModel):
 class PedidoEnCamino(BaseModel):
     pedidoId: str
     estado: str
+
+class PedidoCancelado(BaseModel):
+    pedidoId: str
+    estado: str
