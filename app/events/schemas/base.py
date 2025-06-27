@@ -23,6 +23,7 @@ class EventTopic(str, Enum):
     PEDIDO_ARRIBO = "pedido.arribo"
     DELIVERY_NUEVOREPARTIDOR = "delivery.nuevoRepartidor"
     PEDIDO_ENCAMINO = "pedido.enCamino"
+    PEDIDO_CANCELADO = "pedido.cancelado"
 
 
 class CallbackRequest(BaseModel):

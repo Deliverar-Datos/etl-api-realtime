@@ -16,6 +16,11 @@ def process(db: Session, data: PedidoCancelado):
         ).first()
         repartidor_id = evento_asignado.repartidor_id if evento_asignado else None
 
+        # Si no se encontró repartidor_id, intentar obtenerlo desde resumen
+        if not repartidor_id:
+            resumen = db.query(FactDeliveryResumenPedido).filter(FactDeliveryResumenPedido.pedido_id == data.pedidoId).first()
+            repartidor_id = resumen.repartidor_id if resumen else None
+
         # Insertar o actualizar evento en fact_delivery_eventos
         evento = db.query(FactDeliveryEventos).filter(
             FactDeliveryEventos.pedido_id == data.pedidoId,
@@ -37,8 +42,14 @@ def process(db: Session, data: PedidoCancelado):
 
         # Actualizar resumen y estadísticas
         update_fact_delivery_resumen_pedido(db, data.pedidoId)
-        if repartidor_id:
-            update_fact_repartidor_estadisticas(db, repartidor_id)
+        # Obtener repartidor_id solo desde evento ASIGNADO para actualizar estadísticas
+        evento_asignado = db.query(FactDeliveryEventos).filter(
+            FactDeliveryEventos.pedido_id == data.pedidoId,
+            FactDeliveryEventos.estado == "ASIGNADO"
+        ).first()
+        repartidor_id_asignado = evento_asignado.repartidor_id if evento_asignado else None
+        if repartidor_id_asignado:
+            update_fact_repartidor_estadisticas(db, repartidor_id_asignado)
 
         return data
     except Exception as e:

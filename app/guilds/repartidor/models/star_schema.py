@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, DECIMAL, DATE, BOOLEAN, ForeignKey
+from sqlalchemy import Column, Integer, String, TIMESTAMP, DECIMAL, DATE, BOOLEAN, Boolean, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from app.models.database import Base
@@ -54,6 +54,10 @@ class FactDeliveryResumenPedido(Base):
     tiempo_total_mins = Column(Integer)
     estado_final = Column(String(20))
 
+    fecha_cancelado = Column(TIMESTAMP)
+    pedido_cancelado = Column(Boolean)
+    tiempo_hasta_cancelacion_mins = Column(Integer)
+
     repartidor = relationship("DimRepartidor", back_populates="resumenes")
 
 
@@ -74,6 +78,7 @@ class FactRepartidorEstadisticas(Base):
     pedidos_en_camino = Column(Integer)
     pedidos_arribo = Column(Integer)
     pedidos_pendientes = Column(Integer)
+    pedidos_cancelados = Column(Integer)
 
     tasa_entregas = Column(DECIMAL(5, 2))
     tiempo_promedio_entrega_mins = Column(DECIMAL(6, 2))

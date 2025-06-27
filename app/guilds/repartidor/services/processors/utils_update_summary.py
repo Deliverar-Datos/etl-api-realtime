@@ -47,6 +47,10 @@ def update_fact_delivery_resumen_pedido(db: Session, pedido_id: str):
             estado_final = "ENTREGADO"
         elif fechas_estado["CANCELADO"]:
             estado_final = "CANCELADO"
+            # Para cancelados, asignar tiempo_total_mins igual a tiempo_hasta_cancelacion_mins
+            tiempo_total_mins = None
+            if fecha_asignado and fechas_estado["CANCELADO"]:
+                tiempo_total_mins = int((fechas_estado["CANCELADO"] - fecha_asignado).total_seconds() / 60)
         else:
             # Si no está entregado ni cancelado, tomar el último estado conocido
             estados_orden = ["ASIGNADO", "PENDIENTE", "EN_CAMINO", "ARRIBO", "ENTREGADO", "CANCELADO"]
@@ -105,7 +109,7 @@ def update_fact_repartidor_estadisticas(db: Session, repartidor_id: int):
         pedidos_en_camino = sum(1 for p in pedidos if p.estado_final == "EN_CAMINO")
         pedidos_arribo = sum(1 for p in pedidos if p.estado_final == "ARRIBO")
         pedidos_pendientes = sum(1 for p in pedidos if p.estado_final == "PENDIENTE")
-        pedidos_cancelados = sum(1 for p in pedidos if p.estado_final == "CANCELADO")
+        pedidos_cancelados = sum(1 for p in pedidos if p.estado_final and p.estado_final.strip().upper() == "CANCELADO")
 
         tasa_entregas = (pedidos_entregados / total_pedidos) * 100 if total_pedidos > 0 else 0
 
@@ -123,15 +127,20 @@ def update_fact_repartidor_estadisticas(db: Session, repartidor_id: int):
         pedidos_ultimos_7_dias = 0
         now = datetime.utcnow()
         for p in pedidos:
-            if p.fecha_entregado and (now - p.fecha_entregado) <= timedelta(days=7):
+            if (p.fecha_entregado and (now - p.fecha_entregado) <= timedelta(days=7)) or (p.fecha_cancelado and (now - p.fecha_cancelado) <= timedelta(days=7)):
                 pedidos_ultimos_7_dias += 1
-                if not fecha_ultima_entrega or p.fecha_entregado > fecha_ultima_entrega:
+                # Actualizar fecha_ultima_entrega considerando entregas y cancelaciones
+                if not fecha_ultima_entrega or (p.fecha_entregado and p.fecha_entregado > fecha_ultima_entrega):
                     fecha_ultima_entrega = p.fecha_entregado
+                if not fecha_ultima_entrega or (p.fecha_cancelado and p.fecha_cancelado > fecha_ultima_entrega):
+                    fecha_ultima_entrega = p.fecha_cancelado
 
         repartidor = db.query(FactRepartidorEstadisticas).filter(FactRepartidorEstadisticas.repartidor_id == repartidor_id).first()
         if not repartidor:
             repartidor = FactRepartidorEstadisticas(repartidor_id=repartidor_id)
             db.add(repartidor)
+
+        print(f"Repartidor {repartidor_id} - total_pedidos: {total_pedidos}, pedidos_cancelados: {pedidos_cancelados}")
 
         repartidor.total_pedidos = total_pedidos
         repartidor.pedidos_entregados = pedidos_entregados
@@ -155,6 +164,8 @@ def update_fact_repartidor_estadisticas(db: Session, repartidor_id: int):
             repartidor.telefono = dim_repartidor.telefono
             repartidor.email = dim_repartidor.email
 
+        db.merge(repartidor)
+        db.flush()
         db.commit()
     except SQLAlchemyError as e:
         db.rollback()
